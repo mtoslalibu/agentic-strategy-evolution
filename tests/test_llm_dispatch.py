@@ -321,3 +321,11 @@ class TestLLMDispatcher:
         d = _make_dispatcher(work_dir, [])
         with pytest.raises(ValueError, match="Unknown role/phase"):
             d.dispatch("wizard", "conjure", output_path=work_dir / "x", iteration=1)
+
+
+class TestBLISCampaign:
+    def test_blis_campaign_validates_against_schema(self) -> None:
+        blis_path = Path(__file__).resolve().parent.parent / "examples" / "blis" / "campaign.yaml"
+        campaign = yaml.safe_load(blis_path.read_text())
+        schema = load_schema("campaign.schema.yaml")
+        jsonschema.validate(campaign, schema)
